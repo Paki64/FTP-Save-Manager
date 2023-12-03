@@ -8,7 +8,7 @@
  This code was developed and tested only for Linux and WSL 2.0.
 
  ## Important notes
- This is no cloud syncing, 
+ This is no cloud syncing and it will probably never be: for every syncronization it needs the console connected to ftp (ex. FTPD on 3DS) and a pc with the utility running on the same local network (I made this tool in order to use it on my server).
  Due to file structure, this utility requires the presence of an already existing save file for 3DS Games on 3DS: make sure to have already made a backup on checkpoint named CITRA (if you don't wanna change the config.ini value). 
 
 ## Q&A
