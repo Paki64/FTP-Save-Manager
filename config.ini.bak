@@ -1,0 +1,40 @@
+#   CONFIGURATION
+
+[GENERAL]
+
+#   MULTI-PLATFORM SETTINGS
+Emu_Dump_location = ./Sync/Emulation
+Dry_run_emu = false
+#   if dry_run option in true there will be no real data written, useful for testing
+
+
+[NINTENDO 3DS]
+
+#   SETTINGS
+Enabled_FTP = true
+Enabled_saves = true
+Enabled_ext = true
+Dry_run_FTP = false
+Dry_run_sync = false
+#   if dry_run option in true there will be no real data written, useful for testing
+
+#   FTP INFO
+FTP_address = 192.168.1.175
+FTP_port = 5000
+FTP_save_location = 3ds/Checkpoint
+FTP_emu_location = roms/nds/saves
+FTP_snes_location = 3ds/snes9x_3ds/saves
+
+
+#   REMINDER TO RENAME IN CHECKPOINT - FAIL IF MISSING
+Checkpoint_save_name = CITRA
+
+#   RELATIVE CONSOLE PATH - FAIL IF INCORRECT
+Dump_FTP_location = ./Console/3DS
+Dump_save_location = ./Console/3DS/saves
+Dump_ext_location = ./Console/3DS/extdata
+
+#   RELATIVE CITRA PATH - WILL CREATE WRONG DIRECTORIES IF INCORRECT
+Citra_sync_save_location = ./Sync/Citra/title/00040000
+Citra_sync_ext_location = ./Sync/Citra/extdata/00000000
+
