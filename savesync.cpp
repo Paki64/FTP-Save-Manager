@@ -69,7 +69,7 @@ void sav_3ds(){
             }
 
             if(fork()==0){
-                const char *env[] = {"--progress", "--no-prompt", "--force", "--resolve new", "--dry-run", "--create-folder", NULL};
+                const char *env[] = {"--progress", "--no-prompt", "--force", "--resolve new", "--create-folder", NULL};
                 if(dry_run_3ds){
                     execlp("pyftpsync", "", "sync", "-n", console_path.c_str(), citra_path.c_str(), (char*) NULL, env, NULL);
                 }
@@ -112,7 +112,7 @@ void ext_3ds(){
             }
 
             if(fork()==0){
-                const char *env[] = {"--progress", "--no-prompt", "--force", "--resolve new", "--dry-run", "--create-folder", NULL};
+                const char *env[] = {"--progress", "--no-prompt", "--force", "--resolve new", "--create-folder", NULL};
                 if(dry_run_3ds){
                     execlp("pyftpsync", "", "sync", "-n", console_path.c_str(), citra_path.c_str(), (char*) NULL, env, NULL);
                 }
