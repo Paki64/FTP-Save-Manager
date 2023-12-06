@@ -12,14 +12,14 @@ using std::string;
     static pid_t res = getpid();
 
 
-void ftp_3ds(){
+int ftp_3ds(){
 
     string console = "NINTENDO 3DS";
     bool enable = r.Get<bool>(console, "Enabled_FTP");
     if(enable){
         string remote_root = "ftp://anonymous:@"+r.Get<string>(console, "FTP_address")+":"+r.Get<string>("NINTENDO 3DS", "FTP_port");
         bool dry_run = r.Get<bool>(console, "Dry_run_FTP");
-
+        int* ex = new int;
 
         // EMULATION
         res = fork();
@@ -33,63 +33,72 @@ void ftp_3ds(){
                 }
             else execlp("pyftpsync", "", "sync", local.c_str(), remote.c_str(), (char*) NULL, env, NULL);
         }
-        wait(NULL);
+        wait(ex);
+        std::cout<<ex;
 
         // NDS
-        res = fork();
-        if(res == 0){
-            string remote = remote_root + "/" + r.Get<string>(console, "FTP_nds_location");
-            string local = r.Get<string>("GENERAL", "NDS_Dump_location");
-            const char *env[] = {"--no-prompt", "--progress", "--no-prompt", "--force", "--resolve=new", "--dry-run", "--create-folder", NULL};
-            
-            if(dry_run){
-                execlp("pyftpsync", "", "sync", "-n", local.c_str(), remote.c_str(), (char*) NULL, env, NULL);
-                }
-            else execlp("pyftpsync", "", "sync", local.c_str(), remote.c_str(), (char*) NULL, env, NULL);
+        if(ex==0){
+            res = fork();
+            if(res == 0){
+                string remote = remote_root + "/" + r.Get<string>(console, "FTP_nds_location");
+                string local = r.Get<string>("GENERAL", "NDS_Dump_location");
+                const char *env[] = {"--no-prompt", "--progress", "--no-prompt", "--force", "--resolve=new", "--dry-run", "--create-folder", NULL};
+                
+                if(dry_run){
+                    execlp("pyftpsync", "", "sync", "-n", local.c_str(), remote.c_str(), (char*) NULL, env, NULL);
+                    }
+                else execlp("pyftpsync", "", "sync", local.c_str(), remote.c_str(), (char*) NULL, env, NULL);
+            }
+            wait(NULL);
         }
-        wait(NULL);
 
         // CONSOLE
-        res = fork();
-        if(res == 0){
-            string remote = remote_root + "/" + r.Get<string>(console, "Dump_FTP_location");
-            string local = r.Get<string>(console, "Dump_save_location");
-            const char *env[] = {"--no-prompt", "--progress", "--no-prompt", "--force", "--resolve=new", "--dry-run", "--create-folder", NULL};
-            
-            if(dry_run){
-                execlp("pyftpsync", "", "sync", "-n", local.c_str(), remote.c_str(), (char*) NULL, env, NULL);
-                }
-            else execlp("pyftpsync", "", "sync", local.c_str(), remote.c_str(), (char*) NULL, env, NULL);
+        if(ex==0){
+            res = fork();
+            if(res == 0 && ex){
+                string remote = remote_root + "/" + r.Get<string>(console, "Dump_FTP_location");
+                string local = r.Get<string>(console, "Dump_save_location");
+                const char *env[] = {"--no-prompt", "--progress", "--no-prompt", "--force", "--resolve=new", "--dry-run", "--create-folder", NULL};
+                
+                if(dry_run){
+                    execlp("pyftpsync", "", "sync", "-n", local.c_str(), remote.c_str(), (char*) NULL, env, NULL);
+                    }
+                else execlp("pyftpsync", "", "sync", local.c_str(), remote.c_str(), (char*) NULL, env, NULL);
+            }
+            wait(NULL);
+        return ex;
         }
-        wait(NULL);
-
     }
+    return -1;
 }
 
 
 
 int main(){
 
+    // SYNC ENABLERS: Syncing folders without FTP could lead to conflicts (thanks 3DS timestamp)
+    int ex_3ds = -1;
 
 
     // FTP CONNECTIONS
     // 3DS
     res = fork();
     if(res==0){
-        ftp_3ds();
+        ex_3ds = ftp_3ds();
         exit(0);
     }
-    else wait(NULL);
+    else wait(&ex_3ds);
 
 
     // INTERNAL SYNCS
-    res = fork();
-    if(res==0){
-        const char* arg;
-        execl("./savesync", arg, (char*) NULL);
+    if(ex_3ds==0){
+        res = fork();
+        if(res==0){
+            const char* arg;
+            execl("./savesync", arg, (char*) NULL);
+        }
+        wait(NULL);
     }
-    wait(NULL);
-
 
     exit(0);
 }
