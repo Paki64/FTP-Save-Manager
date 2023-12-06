@@ -36,7 +36,6 @@ int ftp_3ds(){
         }
         wait(&ex);
         ex_val = WEXITSTATUS(ex);
-        std::cout<<ex_val;
 
         // NDS
         if(ex_val==0){
