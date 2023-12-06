@@ -19,7 +19,8 @@ int ftp_3ds(){
     if(enable){
         string remote_root = "ftp://anonymous:@"+r.Get<string>(console, "FTP_address")+":"+r.Get<string>("NINTENDO 3DS", "FTP_port");
         bool dry_run = r.Get<bool>(console, "Dry_run_FTP");
-        int* ex = new int;
+        int ex;
+        int ex_val;
 
         // EMULATION
         res = fork();
@@ -33,11 +34,12 @@ int ftp_3ds(){
                 }
             else execlp("pyftpsync", "", "sync", local.c_str(), remote.c_str(), (char*) NULL, env, NULL);
         }
-        wait(ex);
-        std::cout<<ex;
+        wait(&ex);
+        ex_val = WEXITSTATUS(ex);
+        std::cout<<ex_val;
 
         // NDS
-        if(ex==0){
+        if(ex_val==0){
             res = fork();
             if(res == 0){
                 string remote = remote_root + "/" + r.Get<string>(console, "FTP_nds_location");
@@ -53,7 +55,7 @@ int ftp_3ds(){
         }
 
         // CONSOLE
-        if(ex==0){
+        if(ex_val==0){
             res = fork();
             if(res == 0 && ex){
                 string remote = remote_root + "/" + r.Get<string>(console, "Dump_FTP_location");
@@ -66,7 +68,7 @@ int ftp_3ds(){
                 else execlp("pyftpsync", "", "sync", local.c_str(), remote.c_str(), (char*) NULL, env, NULL);
             }
             wait(NULL);
-        return ex;
+        return ex_val;
         }
     }
     return -1;
@@ -78,16 +80,17 @@ int main(){
 
     // SYNC ENABLERS: Syncing folders without FTP could lead to conflicts (thanks 3DS timestamp)
     int ex_3ds = -1;
-
+    int ex;
 
     // FTP CONNECTIONS
     // 3DS
     res = fork();
     if(res==0){
-        ex_3ds = ftp_3ds();
-        exit(0);
+        ex = ftp_3ds();
+        exit(ex);
     }
-    else wait(&ex_3ds);
+    else wait(&ex);
+    ex_3ds = WEXITSTATUS(ex);
 
 
     // INTERNAL SYNCS
