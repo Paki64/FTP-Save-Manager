@@ -26,19 +26,7 @@ void ftp_3ds(){
         if(res == 0){
             string remote = remote_root + "/" + r.Get<string>(console, "FTP_emu_location");
             string local = r.Get<string>("GENERAL", "Emu_Dump_location");
-            const char *env[] = {"--no-prompt", "--progress", "--no-prompt", "--force", "--resolve new", "--dry-run", "--create-folder", NULL};
-            
-            if(dry_run){
-                execlp("pyftpsync", "", "sync", "-n", local.c_str(), remote.c_str(), (char*) NULL, env, NULL);
-                }
-            else execlp("pyftpsync", "", "sync", local.c_str(), remote.c_str(), (char*) NULL, env, NULL);
-        }
-        wait(NULL);
-        res = fork();
-        if(res == 0){
-            string remote = remote_root + "/" + r.Get<string>(console, "FTP_snes_location");
-            string local = r.Get<string>("GENERAL", "Emu_Dump_location");
-            const char *env[] = {"--no-prompt", "--progress", "--no-prompt", "--force", "--resolve new", "--dry-run", "--create-folder", NULL};
+            const char *env[] = {"--no-prompt", "--progress", "--no-prompt", "--force", "--resolve=new", "--dry-run", "--create-folder", NULL};
             
             if(dry_run){
                 execlp("pyftpsync", "", "sync", "-n", local.c_str(), remote.c_str(), (char*) NULL, env, NULL);
@@ -47,13 +35,26 @@ void ftp_3ds(){
         }
         wait(NULL);
 
+        // NDS
+        res = fork();
+        if(res == 0){
+            string remote = remote_root + "/" + r.Get<string>(console, "FTP_nds_location");
+            string local = r.Get<string>("GENERAL", "NDS_Dump_location");
+            const char *env[] = {"--no-prompt", "--progress", "--no-prompt", "--force", "--resolve=new", "--dry-run", "--create-folder", NULL};
+            
+            if(dry_run){
+                execlp("pyftpsync", "", "sync", "-n", local.c_str(), remote.c_str(), (char*) NULL, env, NULL);
+                }
+            else execlp("pyftpsync", "", "sync", local.c_str(), remote.c_str(), (char*) NULL, env, NULL);
+        }
+        wait(NULL);
 
         // CONSOLE
         res = fork();
         if(res == 0){
             string remote = remote_root + "/" + r.Get<string>(console, "Dump_FTP_location");
             string local = r.Get<string>(console, "Dump_save_location");
-            const char *env[] = {"--no-prompt", "--progress", "--no-prompt", "--force", "--resolve new", "--dry-run", "--create-folder", NULL};
+            const char *env[] = {"--no-prompt", "--progress", "--no-prompt", "--force", "--resolve=new", "--dry-run", "--create-folder", NULL};
             
             if(dry_run){
                 execlp("pyftpsync", "", "sync", "-n", local.c_str(), remote.c_str(), (char*) NULL, env, NULL);

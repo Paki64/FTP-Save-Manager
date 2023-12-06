@@ -3,9 +3,10 @@
 [GENERAL]
 
 #   MULTI-PLATFORM SETTINGS
-Emu_Dump_location = ./Sync/Emulation
-Dry_run_emu = false
+Emu_Dump_location = /mnt/d/Saves/Emulation/Retroarch/saves
+Dry_run_emu = true
 #   if dry_run option in true there will be no real data written, useful for testing
+NDS_Dump_location = /mnt/d/Saves/Emulation/melonDS/saves
 
 
 [NINTENDO 3DS]
@@ -19,7 +20,7 @@ Dry_run_sync = false
 #   if dry_run option in true there will be no real data written, useful for testing
 
 #   FTP INFO
-FTP_address = 192.168.1.175
+FTP_address = 192.168.1.20
 FTP_port = 5000
 FTP_save_location = 3ds/Checkpoint
 FTP_emu_location = roms/nds/saves
@@ -30,11 +31,11 @@ FTP_snes_location = 3ds/snes9x_3ds/saves
 Checkpoint_save_name = CITRA
 
 #   RELATIVE CONSOLE PATH - FAIL IF INCORRECT
-Dump_FTP_location = ./Console/3DS
-Dump_save_location = ./Console/3DS/saves
-Dump_ext_location = ./Console/3DS/extdata
+Dump_FTP_location = /mnt/d/Saves/FTP/Console/3DS
+Dump_save_location = /mnt/d/Saves/FTP/Console/3DS/saves
+Dump_ext_location = /mnt/d/Saves/FTP/Console/3DS/extdata
 
 #   RELATIVE CITRA PATH - WILL CREATE WRONG DIRECTORIES IF INCORRECT
-Citra_sync_save_location = ./Sync/Citra/title/00040000
-Citra_sync_ext_location = ./Sync/Citra/extdata/00000000
+Citra_sync_save_location = /mnt/d/Saves/FTP/Emulation/Citra/sdmc/Nintendo 3DS/00000000000000000000000000000000/00000000000000000000000000000000/title/00040000
+Citra_sync_ext_location = /mnt/d/Saves/FTP/Emulation/Citra/sdmc/Nintendo 3DS/00000000000000000000000000000000/00000000000000000000000000000000/extdata/00000000
 
